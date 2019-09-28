@@ -1,0 +1,12 @@
+{
+  "exclusive_classes":true,
+  "architecture":"simple_cnn",
+  "labels":[
+    "PRODUCE",
+    "DAIRY",
+    "MEAT_FISH",
+    "SPICES",
+    "OTHER"
+  ],
+  "pretrained_vectors":null
+}
