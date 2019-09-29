@@ -40,9 +40,11 @@ AWS is the serverless back-end our code will be deployed to for this tutorial.  
 To setup these permissions log into your AWS account and navigate to the **IAM** under the **Services** menu.
 
 ![](https://lh3.googleusercontent.com/1GAiNAPjt9i_yUNbD0G65GOrATEjsoM4v0QVegQHjEwaG3jEhExH8AV3DlaUhpl-A8mf04lD2Kdj "Location of IAM in AWS Services Menu")
+
 From the menu on the left select **Roles** and then click the blue **Create Role** button.  On the **Create Role** page select the **Lambda** since that is how we will be executing our code.  Once selected click the blue **Next: Permissions** button on the bottom right.
 
 ![](https://lh3.googleusercontent.com/m5JnyWbdgMgVtkGqMtPRuPwseUlsXWQ87G7YPIQwkZLwYtcWVuKPfpdDnk4-ClLwW-OPgnEp8Abj "Selecting Lambda for Role")
+
 The different permissions we're going to grant our bot are defined in this section.  Using the search bar we can search for the policies we need to implement and click the checkbox next to them.  The policies we need to attach are:
 
 - AmazonTextractFullAccess
@@ -237,6 +239,7 @@ AWS Lambda functions are a serverless method to deploy code.  Lambda functions a
 From the AWS Services menu select **Lambda** and click the orange **Create  Function** button on the next page.
 
 ![Shows where to find the Lambda function option in the AWS Services menu.](https://lh3.googleusercontent.com/EZoVIcAkLGEzywvY7uawZjaC8FaVReOwZuXdTElmojKlB4Hfrnm2xlgdaV4yl8dTs9O8iuK1OB-J "Locating Lambda")
+
 Let's setup our Lambda function:
 
 - In the **Function name** field enter "sous-chef-bot-function".  
@@ -267,6 +270,7 @@ arn:aws:lambda:<region name>:565208013763:layer:spacy-2-1-8-en-only:1
 If you're deploying to the `us-east-1` region the ARN should look like the following,
 
 ![What the Lambda Layer addition should look like.](https://lh3.googleusercontent.com/usI1IZahT3swY5dNa5pFmHjvqCDJMZ51FrStG49sAocHXt3CiTJGDTSweNL0QPWWLlAJM60YeRHe "Adding Layer Version")
+
 A second layer needs to be created for a specific version of `boto3` to allow access to AWS Textract.  Repeat the same process to create a layer using the ARN below being sure to use the appropriate region name:
 
 ```
@@ -278,6 +282,7 @@ After you've created the Lambda Layers go ahead and save your progress with the 
 Remember the zip file we created earlier?  You're going to need that here as all of the core function code is in that zip file, which needs to be updated to the Lambda function.  On the Lambda page click **twilio-sous-chef-function** above where you selected **Layers** then  scroll down to the **Function code** section.  In the "Code entry type" dropdown select "Upload a .zip file", click the "Upload" button and select the `sous-chef-bot-lambda-package.zip` file you created.  An entry point to the code needs to be established so that Lambda knows where code execution should begin.  To the right in the "Handler" text box replace the existing text with `lambda_handler.main`.  This tells our Lambda function to execute `lambda_handler.main` when the function is initialized.  When you're done this section should look like the following:
 
 ![Displays what the "Function code" section of the Lambda setup should look like when completed.](https://lh3.googleusercontent.com/ZUy2hiJPeVdiz4ckcFJZvXxtZH3AyDTcTXbif88Iv18hzbjuCKZ4_sZnNEOoYJ-nV0kZuNm8q3BB "Lambda Function Code Setup")
+
 Two last configurations setting up our Lambda function before moving on.  By default Lambda functions will timeout after 3 seconds.  Our function is doing a lot with Textract and the NLP so we need to increase our timeout to allow the computation to complete.  Scroll down a little further on the Lambda page.  In the "Basic settings" section there is a "Timeout" option.  Increase the number of seconds to 10.  Lambda functions by default have 128MB of memory available.  To improve processing speed double the memory to be 256MB.
 
 ![Displays where to set the Lambda timeout](https://lh3.googleusercontent.com/N-L5YER6GgH5rbxAUFO-FoFNwnU1ytdcq1sfkowXuH7VGvv8mnCXr___ZttIYb6bPOkiz6VwH22q "Increase Lambda timeout")
@@ -292,9 +297,11 @@ We're almost done setting up the AWS components we will need.  The last step wit
 From the AWS Console select **API Gateway** from the list of services.  Click the **Create API** button.  On the screen to create a new API fill-in the API name with a name for the API.  Let's call our API, "twilio-sms-recipe".  Everything else on the page can be left as default settings like the image below and you can click the blue **Create API** button.
 
 ![](https://lh3.googleusercontent.com/dulGvt0JcpLuqUHOi7pDsxvZzOD95Sg7rEh5Kpat_0Z3c-VwEs7h1fa2cWw0GhqPR-wgx5mJDZCl "Create API page")
+
 Next, we need to add a new resource for our API.  Select **Create Resource** from the **Actions** menu.  Name the resource "send-recipe", and click the blue **Create Resource** button.  In the list of **Resources** panel you should see the `/send-recipe` resource that was created.  We need to add a method to that resource.  From **Actions** select **Create Method**.  Below `/send-recipe` a dialog box will appear.  From the drop down choose `POST` and click the check mark next to the drop down like the picture below.
 
 ![enter image description here](https://lh3.googleusercontent.com/Lq26R9HuHylVOZU_p46JZ20nwykJt_HX3pMuDWv6bF2NV4V0wnf96c6hBG2XNVFjrgRT4FkeQIDA "Adding method to the API.")
+
 After clicking the check mark the panel on the right will change to help setup the `POST` method.  In this panel we will attach the `POST` method to the Lambda function we created.  In the dialog for the **Lambda Function** input the name of the Lambda function we created earlier (it was "twilio-sous-chef-fuction").  Then click the blue **Save** button and click **Ok** in the dialog that appears.
 
 The next page shows how data flows through the API Gateway.  There our three basic parts to the API Gateway:
@@ -322,6 +329,7 @@ We need to make a couple transformations to data in the **Request** and **Respon
  When you're done the **Mapping Templates** section should look like this,
 
 ![enter image description here](https://lh3.googleusercontent.com/1C_o4jLrS8vG458JWpR_ef4Wz_N7ijQkSQP0EoAgB90-mJ-vkYWmeX7qnQjDT12O52J07EiHLlyh "Method Execution- Mapping Templates Configuration")
+
 Likewise, we need to convert the JSON response we receive from the API Gateway to be XML that is used by Twilio.  Go back to the **Method Execution** for your API and this time click on the **Integration Response** section.  We need to update the mapping templates for our response from the Lambda function.  Expand the row where **Method response status** is 200 and scroll down to the **Mapping Templates** section.  You'll see that `application/json` is provided in the table.  Remove that row by clicking the `-` sign, click **Add mapping template** and input `application/xml`.  After you click the check mark define the template by inputting the following,
 
 ```
@@ -332,14 +340,17 @@ $inputRoot
 Click **Save**.  When done the **Mapping Templates** section of your **Integration Response** should look like this:
 
 ![enter image description here](https://lh3.googleusercontent.com/cOGtXa5Y9cTE2DNfpcvij22wXQvATy07ADly3T4P0prRWbpNoDgGHg30XXNiReJZwEQahwnJbUsB "Integration Response Mapping Templates")
+
 The last edit We have to make one more edit to our API, is in the **Method Response** section.  Expand the section where the HTTP Status is 200.  In the **Response Body for 200** section remove the current `application/json` entry, click **Add Response Model** and enter `application/xml` in the text box, select `Empty` from the **Models** drop down and click the check mark.
 
 The API is ready for deployment!  Click the **Actions** button and choose the **Deploy API** option.  AWS allows you to define different stages of deployment for your API, for this tutorial choose **[New Stage]** and write "prod" as the **Stage Name** and then click **Deploy**.
 
 ![enter image description here](https://lh3.googleusercontent.com/ehOB7vJDqREBSNvSt1vZJiLQ8lKHnKCDHKWOmRuafwHRNQ4_Y80OUUqvGJnnz-dOTVbnDRC-jghg)
+
 Our API is deployed!  In the blue box is the "Invoke URL".  Copy that URL as we will need it to connect our Twilio number to the API Gateway we just created.
 
 ![Shows where the find the invoke URL.](https://lh3.googleusercontent.com/E8V51pewzB56GTfp6-5-EuRApPzxzkqHIEoqMWS1-_tYooC0N78HSW1dxkxr8QVPBQe6-vTGZG87 "Invoke URL Location")
+
 ## Connecting Twilio with the API Gateway
 
 All that's left is to connect the API Gateway to the Twilio number you setup at the beginning.  Log in to your Twilio account and navigate to the SMS number you are using for the tutorial.  Scroll to the bottom of the page and find the **Messaging** section.  In this section you can define actions for when messages are received by your Twilio number.  For this tutorial a webhook is going to be configured to call the API Gateway that was just setup.  Underneath **A Message Comes In** make sure **Webhook** is selected from the drop down and paste in the URL for the API Gateway making sure to add `/send-recipe` at the end of the URL so it's pointing to the correct resource.  When you're done the URL should look like this:
@@ -349,6 +360,7 @@ https://<api-id>.execute-api.<region>.amazonaws.com/prod/send-recipe
 ```
 
 ![Where to configure the Webhook in Twilio](https://lh3.googleusercontent.com/wsj97YhGEg1oAM0Budh91DysFY2w7_Wy63P0OC5tHZQ-S894zR1dq0_Gw_hbf3Cpj4nsUfPQ-tar "Twilio Webhook Config")
+
 Make sure you're using a `HTTP POST` method and click **Save** at the bottom of the page.  And we're done!  Let's see our bot in action!
 
 ## Your Own Sous Chef Bot in Action!
