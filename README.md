@@ -22,9 +22,7 @@ To complete this project we’ll be using Twilio to send/receive text messages. 
 
 ![Shows how to filter but a number.](https://lh3.googleusercontent.com/UCjz0NXF98WbNYtTYe3ihEhyzwQ2B-8K2km_UmQbh4CmUrg8YEraPixxCr84CsAClTSyuLoWAtbS "Buying a Number")
 
-**IMPORTANT**- One limitation to this tutorial is that sending / receiving MMS messages is only available for U.S. and Canadian phone numbers through Twilio.  \
-If you are outside those regions there is still a lot that can be learned through this tutorial, but unfortunately you \
-won't be able to complete the last step connecting to Twilio because we're sending a MMS message.
+**IMPORTANT**- One limitation to this tutorial is that sending / receiving MMS messages is only available for U.S. and Canadian phone numbers through Twilio.  If you are outside those regions there is still a lot that can be learned through this tutorial, but unfortunately you won't be able to complete the last step connecting to Twilio because we're sending a MMS message.
 
 You will also need an AWS account since that will be where the serverless environment we use in this tutorial will be deployed. For an introduction on AWS and details of the various services provided, AWS has a great [getting started](https://aws.amazon.com/getting-started/) section with detailed explanations.
 
@@ -286,6 +284,7 @@ Remember the zip file we created earlier?  You're going to need that here as all
 Two last configurations setting up our Lambda function before moving on.  By default Lambda functions will timeout after 3 seconds.  Our function is doing a lot with Textract and the NLP so we need to increase our timeout to allow the computation to complete.  Scroll down a little further on the Lambda page.  In the "Basic settings" section there is a "Timeout" option.  Increase the number of seconds to 10.  Lambda functions by default have 128MB of memory available.  To improve processing speed double the memory to be 256MB.
 
 ![Displays where to set the Lambda timeout](https://lh3.googleusercontent.com/N-L5YER6GgH5rbxAUFO-FoFNwnU1ytdcq1sfkowXuH7VGvv8mnCXr___ZttIYb6bPOkiz6VwH22q "Increase Lambda timeout")
+
 When you're done click the orange **Save** button in the upper right.  Just like that our code has been deployed to the cloud!  
 
 The next step is to setup the API Gateway so that our number can call the function we just created.
