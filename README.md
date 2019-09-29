@@ -368,5 +368,7 @@ Text a recipe screenshot to the Twilio number you purchased and see what happens
 
 ## Next Steps.
 
-Congratulations!  Now that you've built the bot let's see what else you can do.  If you have an iPhone you can use Apple Shortcuts to create a [one-click workflow on your phone's home screen](https://dev.to/vealkind/integrating-twilio-bots-into-mobile-workflows-with-apple-shortcuts-1d3a) to launch your bot and automatically create a new note with the shopping ingredients.  
+Congratulations!  Now that you've built the bot let's see what else you can do.  If you have an iPhone you can use Apple Shortcuts to create a [one-click workflow on your phone's home screen](https://dev.to/vealkind/integrating-twilio-bots-into-mobile-workflows-with-apple-shortcuts-1d3a) to launch your bot and automatically create a new note with the shopping ingredients.
+
+I hope you enjoyed building your own recipe screen list builder and learned something along the way!
 
