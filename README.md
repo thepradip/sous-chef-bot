@@ -259,6 +259,7 @@ We will be creating Layers for each of these dependencies so that these external
 To add a Layer to our Lambda function click the **Layers** button on the Lambda function screen.
 
 ![Where to find the Layers Button in AWS Lambda](https://lh3.googleusercontent.com/kmL1O6o7M4OpNJBA36pK13NcjvT1BgjW7c4ydSOqVvkobmmuxbYmP1lcu9Mt-IDdBKX75iM1HlnH "Layers Button")
+
 Scroll to the bottom of the page and click **Add a layer**.  Here is where the sharing comes into play.  We're going to use an existing Layer that has already been created for the spaCy dependency where all the non-English corpora so that spaCy fits comfortably into the size limitations of Lambda Layers for our function.  We're going to do that with the Amazon Resource Name (ARN), so select the **Provide a layer version ARN** option.  Enter the ARN below for the spaCy layer being sure to replace  `<region name>` with the name of the AWS region you will be deploying your Lambda function to.
 
 ```
